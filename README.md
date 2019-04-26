@@ -9,3 +9,4 @@ Personal bot framework for glip
 - Support extend rules by skills.
 - Fuzzy matching FAQ skill: support Fuzzy matching FAQ by documents/Google drive docs.
 - Several example skills: tel number, world time, weather...
+- Submit form with posting photo to releated glip account.
