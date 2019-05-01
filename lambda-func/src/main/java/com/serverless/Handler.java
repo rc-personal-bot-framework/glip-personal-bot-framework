@@ -1,29 +1,43 @@
 package com.serverless;
 
-import java.util.Date;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import object.SheetRequest;
+import org.apache.log4j.Logger;
+import sheet.GoogleSheetService;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+public class Handler implements RequestHandler<SheetRequest, ApiGatewayResponse> {
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+    private static final Logger LOG = Logger.getLogger(Handler.class);
 
-public class Handler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
+    private GoogleSheetService service;
 
-	private static final Logger LOG = Logger.getLogger(Handler.class);
+    public Handler() {
+        service = new GoogleSheetService();
+    }
 
-	@Override
-	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
-		LOG.info("received: " + input);
-		Response responseBody = new Response("Hello, the current time is " + new Date());
-		Map<String, String> headers = new HashMap<>();
-		headers.put("X-Powered-By", "AWS Lambda & Serverless");
-		headers.put("Content-Type", "application/json");
-		return ApiGatewayResponse.builder()
-				.setStatusCode(200)
-				.setObjectBody(responseBody)
-				.setHeaders(headers)
-				.build();
-	}
+    @Override
+    public ApiGatewayResponse handleRequest(SheetRequest input, Context context) {
+        LOG.info("received: " + input);
+
+        String responseBody = null;
+        try {
+            responseBody = service.getContent(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Powered-By", "AWS Lambda & Serverless");
+        headers.put("Content-Type", "application/json");
+        return ApiGatewayResponse.builder()
+                .setStatusCode(200)
+                .setObjectBody(responseBody)
+                .setHeaders(headers)
+                .build();
+    }
 }

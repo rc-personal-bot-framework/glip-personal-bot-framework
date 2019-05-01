@@ -8,13 +8,16 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile (
-        'com.amazonaws:aws-lambda-java-core:1.1.0',
-        'com.amazonaws:aws-lambda-java-log4j:1.0.0',
-        'com.fasterxml.jackson.core:jackson-core:2.8.5',
-        'com.fasterxml.jackson.core:jackson-databind:2.8.5',
-        'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
+    compile(
+            'com.amazonaws:aws-lambda-java-core:1.1.0',
+            'com.amazonaws:aws-lambda-java-log4j:1.0.0',
+            'com.fasterxml.jackson.core:jackson-core:2.8.5',
+            'com.fasterxml.jackson.core:jackson-databind:2.8.5',
+            'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
     )
+    compile 'com.google.api-client:google-api-client:1.23.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
 }
 
 // http://docs.aws.amazon.com/lambda/latest/dg/create-deployment-pkg-zip-java.html
@@ -24,6 +27,12 @@ task buildZip(type: Zip) {
     from processResources
     into('lib') {
         from configurations.runtime
+    }
+}
+
+task getHomeDir {
+    doLast {
+        println gradle.gradleHomeDir
     }
 }
 
