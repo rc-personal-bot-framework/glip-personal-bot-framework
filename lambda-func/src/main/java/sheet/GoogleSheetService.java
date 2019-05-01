@@ -1,9 +1,12 @@
 package sheet;
 
 import object.SheetRequest;
+import object.SheetResponse;
+import org.mortbay.util.ajax.JSON;
 import util.ClientUtil;
 
 import java.io.IOException;
+import java.util.Map;
 
 //https://sheets.googleapis.com/v4/spreadsheets/1VrQaPSPHnblVNrc06dyXCExdvlls14Ero0qu51wdzYw/values/A1:B2
 public class GoogleSheetService extends AbstractSheetService {
@@ -20,19 +23,28 @@ public class GoogleSheetService extends AbstractSheetService {
         sr.setDocId("1VrQaPSPHnblVNrc06dyXCExdvlls14Ero0qu51wdzYw");
         sr.setFrom("A1");
         sr.setTo("A1");
-        String result = service.getContent(sr);
-        System.out.println(result);
-
+        String jsonStr = "{\n" +
+                "    \"range\": \"'Class Data'!A1\",\n" +
+                "    \"majorDimension\": \"ROWS\",\n" +
+                "    \"values\": [\n" +
+                "        [\n" +
+                "            \"a1\"\n" +
+                "        ]\n" +
+                "    ]\n" +
+                "}\n";
+        Map response = (Map) JSON.parse(jsonStr);
+        System.out.println(response);
     }
 
-    public String getContent(SheetRequest request) throws IOException {
+    public Map getContent(SheetRequest request) throws IOException {
 
         String tmsUrl = String.format(TMS_URL, request.getTmsKey());
         String googleToken = ClientUtil.getContent(tmsUrl, TMS_TOKEN);
 
         String range = request.getFrom() + ":" + request.getTo();
         String googleUrl = String.format(API_URL, request.getDocId(), range);
-        return ClientUtil.getContent(googleUrl, googleToken);
+        String jsonStr = ClientUtil.getContent(googleUrl, googleToken);
+        return (Map) JSON.parse(jsonStr);
 
     }
 }

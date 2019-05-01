@@ -24,12 +24,13 @@ public class Handler implements RequestHandler<SheetRequest, ApiGatewayResponse>
     public ApiGatewayResponse handleRequest(SheetRequest input, Context context) {
         LOG.info("received: " + input);
 
-        String responseBody = null;
+        Map responseBody = null;
         try {
             responseBody = service.getContent(input);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("", e);
         }
+        LOG.info(String.format("response result : %s ", responseBody));
 
         Map<String, String> headers = new HashMap<>();
         headers.put("X-Powered-By", "AWS Lambda & Serverless");
