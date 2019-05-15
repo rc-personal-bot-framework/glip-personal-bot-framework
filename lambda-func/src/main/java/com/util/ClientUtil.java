@@ -1,9 +1,11 @@
 package com.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.object.SheetResponse;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,25 +23,26 @@ public class ClientUtil {
     }
 
     public static Map getContentMap(String urlStr, String token) throws IOException {
-
-        URL url = new URL(urlStr);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("Authorization", "Bearer " + token);
-
         ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(getContent(urlStr, token), Map.class);
+    }
 
-        return mapper.readValue(con.getInputStream(), Map.class);
+    public static SheetResponse getContentSheetResponse(String urlStr, String token) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(getContent(urlStr, token), SheetResponse.class);
     }
 
     public static String getContentStr(String urlStr, String token) throws IOException {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(getContent(urlStr, token), writer, StandardCharsets.UTF_8);
+        return writer.toString();
+    }
 
+    public static InputStream getContent(String urlStr, String token) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("Authorization", "Bearer " + token);
-
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(con.getInputStream(), writer, StandardCharsets.UTF_8);
-        return writer.toString();
+        return con.getInputStream();
     }
 
 }

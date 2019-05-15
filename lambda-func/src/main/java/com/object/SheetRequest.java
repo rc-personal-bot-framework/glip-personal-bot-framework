@@ -3,17 +3,10 @@ package com.object;
 public class SheetRequest {
     private String userId;
     private String docId;
-    private String tmsKey;
     private String from;
     private String to;
 
-    public String getTmsKey() {
-        return tmsKey;
-    }
-
-    public void setTmsKey(String tmsKey) {
-        this.tmsKey = tmsKey;
-    }
+    private String keyword;
 
     public String getFrom() {
         return from;
@@ -45,5 +38,13 @@ public class SheetRequest {
 
     public void setDocId(String docId) {
         this.docId = docId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

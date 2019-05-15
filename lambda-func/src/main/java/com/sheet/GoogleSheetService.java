@@ -20,22 +20,27 @@ public class GoogleSheetService extends AbstractSheetService {
     public static void main(String... args) throws IOException {
         GoogleSheetService service = new GoogleSheetService();
         SheetRequest sr = new SheetRequest();
-        sr.setTmsKey("lewei");
 
         sr.setDocId("1VrQaPSPHnblVNrc06dyXCExdvlls14Ero0qu51wdzYw");
         sr.setFrom("A1");
         sr.setTo("A1");
-        String jsonStr = "{\n" +
-                "    \"range\": \"'Class Data'!A1\",\n" +
-                "    \"majorDimension\": \"ROWS\",\n" +
-                "    \"values\": [\n" +
-                "        [\n" +
-                "            \"a1\"\n" +
-                "        ]\n" +
-                "    ]\n" +
-                "}\n";
+
+
+        String jsonStr = "{\"range\":\"'Class Data'!A1:B2\",\"majorDimension\":\"ROWS\",\"values\":[[\"question1\",\"Answer1\"],[\"question2\",\"Answer2\"]]}";
         Map response = (Map) JSON.parse(jsonStr);
         System.out.println(response);
+        Object[] sheetValues = (Object[]) response.get("values");
+
+        for (int i = 0; i < sheetValues.length; i++) {
+
+            Object[] value = (Object[]) sheetValues[i];
+
+            if ("question1".contains((String) value[0])) {
+                System.out.println(value[0]);
+                System.out.println(value[1]);
+            }
+        }
+
     }
 
     public Map getContent(SheetRequest request) throws IOException, SQLException {
