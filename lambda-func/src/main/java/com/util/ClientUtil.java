@@ -1,10 +1,14 @@
 package com.util;
 
-import java.io.BufferedReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class ClientUtil {
 
@@ -13,27 +17,29 @@ public class ClientUtil {
 
 
     public static void main(String[] args) throws IOException {
-        ClientUtil.getContent(TMS_URL, TMS_TOKEN);
+        ClientUtil.getContentStr(TMS_URL, TMS_TOKEN);
     }
 
-    public static String getContent(String urlStr, String token) throws IOException {
+    public static Map getContentMap(String urlStr, String token) throws IOException {
 
         URL url = new URL(urlStr);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("Authorization", "Bearer " + token);
 
-        StringBuilder sb = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        return mapper.readValue(con.getInputStream(), Map.class);
+    }
 
-        String input;
+    public static String getContentStr(String urlStr, String token) throws IOException {
 
-        while ((input = br.readLine()) != null) {
-            sb.append(input);
-        }
-        br.close();
+        URL url = new URL(urlStr);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("Authorization", "Bearer " + token);
 
-        return sb.toString();
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(con.getInputStream(), writer, StandardCharsets.UTF_8);
+        return writer.toString();
     }
 
 }

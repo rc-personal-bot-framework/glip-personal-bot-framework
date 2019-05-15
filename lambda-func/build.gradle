@@ -19,7 +19,8 @@ dependencies {
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     compile 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
- 
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
 }
 
 // http://docs.aws.amazon.com/lambda/latest/dg/create-deployment-pkg-zip-java.html

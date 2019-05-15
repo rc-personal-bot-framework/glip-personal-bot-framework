@@ -32,7 +32,7 @@ class MysqlCon {
     public static User getUser(String userId) throws SQLException {
         Connection con = getConn();
         Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from gb_user where userId = " + userId);
+        ResultSet rs = stmt.executeQuery("select * from gb_user where user_id = " + userId);
         User u = new User();
         while (rs.next()) {
             u.setUserId(rs.getString(1));

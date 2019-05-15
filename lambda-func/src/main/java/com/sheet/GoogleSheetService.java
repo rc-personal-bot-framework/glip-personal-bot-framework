@@ -42,12 +42,11 @@ public class GoogleSheetService extends AbstractSheetService {
         User u = MysqlCon.getUser(request.getUserId());
 
         String tmsUrl = String.format(TMS_URL, request.getUserId());
-        String googleToken = ClientUtil.getContent(tmsUrl, TMS_TOKEN);
+        String googleToken = ClientUtil.getContentStr(tmsUrl, TMS_TOKEN);
 
         String range = request.getFrom() + ":" + request.getTo();
         String googleUrl = String.format(API_URL, u.getDocId(), range);
-        String jsonStr = ClientUtil.getContent(googleUrl, googleToken);
-        return (Map) JSON.parse(jsonStr);
+        return ClientUtil.getContentMap(googleUrl, googleToken);
 
     }
 }
