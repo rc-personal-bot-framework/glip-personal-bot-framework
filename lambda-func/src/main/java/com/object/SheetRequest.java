@@ -5,6 +5,7 @@ public class SheetRequest {
     private String docId;
     private String from;
     private String to;
+    private String qaText;
 
     private String keyword;
 
@@ -46,5 +47,13 @@ public class SheetRequest {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getQaText() {
+        return qaText;
+    }
+
+    public void setQaText(String qaText) {
+        this.qaText = qaText;
     }
 }

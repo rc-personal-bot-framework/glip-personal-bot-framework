@@ -3,14 +3,20 @@ package com.sheet;
 import com.object.SheetRequest;
 import com.object.User;
 import com.util.ClientUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.mortbay.util.ajax.JSON;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //https://sheets.googleapis.com/v4/spreadsheets/1VrQaPSPHnblVNrc06dyXCExdvlls14Ero0qu51wdzYw/values/A1:B2
 public class GoogleSheetService extends AbstractSheetService {
+    private static final Logger LOG = Logger.getLogger(GoogleSheetService.class);
 
     private final String API_URL = "https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s";
     private final String TMS_URL = "http://tms-xmup.us-east-1.elasticbeanstalk.com/restapi/v1.0/third_party/token/GOOGLE_DRIVE/%s/";
@@ -45,6 +51,33 @@ public class GoogleSheetService extends AbstractSheetService {
 
     public Map getContent(SheetRequest request) throws IOException, SQLException {
         User u = MysqlCon.getUser(request.getUserId());
+        if (u == null) {
+            MysqlCon.saveUser(request);
+            Map result = new HashMap();
+            result.put("S", "Create use success");
+            return result;
+        }
+
+        LOG.info("user : " + u);
+        if (StringUtils.isNotEmpty(u.getQaText())) {
+            LOG.info("read data from db");
+            Map result = new HashMap();
+            String text = u.getQaText();
+            String[] lines = text.split("\n");
+            List<List<String>> values = new ArrayList<>();
+            for (int i = 0; i < lines.length; i++) {
+                List<String> l = new ArrayList<>();
+                String lStr = lines[i];
+                String[] cells = lStr.split("   ");
+                l.add(cells[0]);
+                l.add(cells[1]);
+                values.add(l);
+
+            }
+            result.put("values", values);
+            return result;
+        }
+        LOG.info("read data from google sheet");
 
         String tmsUrl = String.format(TMS_URL, request.getUserId());
         String googleToken = ClientUtil.getContentStr(tmsUrl, TMS_TOKEN);

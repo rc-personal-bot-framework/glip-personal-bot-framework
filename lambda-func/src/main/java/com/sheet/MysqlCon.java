@@ -1,5 +1,6 @@
 package com.sheet;
 
+import com.object.SheetRequest;
 import com.object.User;
 
 import java.sql.*;
@@ -36,7 +37,21 @@ class MysqlCon {
         while (rs.next()) {
             u.setUserId(rs.getString(1));
             u.setDocId(rs.getString(2));
+            u.setQaText(rs.getString(3));
         }
+        con.close();
+
+        return u;
+    }
+
+    public static User saveUser(SheetRequest request) throws SQLException {
+        Connection con = getConn();
+        User u = new User();
+        PreparedStatement pstmt = con.prepareStatement("INSERT INTO gb_user (user_id, doc_id, qa_text) VALUES (?, ?, ?)");
+        pstmt.setString(1, request.getUserId());
+        pstmt.setString(2, request.getDocId());
+        pstmt.setString(3, request.getQaText());
+        int rs = pstmt.executeUpdate();
         con.close();
 
         return u;
