@@ -7,12 +7,10 @@ import java.sql.*;
 class MysqlCon {
     public static void main(String args[]) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             Connection con = getConn();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from gb_user");
-            while (rs.next())
-                System.out.println(rs.getInt(1) + "  " + rs.getString(2));
+            User u = getUser("lewei");
+            System.out.println(u.getDocId());
+            System.out.println(u.getUserId());
             con.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -31,8 +29,9 @@ class MysqlCon {
 
     public static User getUser(String userId) throws SQLException {
         Connection con = getConn();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from gb_user where user_id = " + userId);
+        PreparedStatement pstmt = con.prepareStatement("select * from gb_user where user_id = ?");
+        pstmt.setString(1, userId);
+        ResultSet rs = pstmt.executeQuery();
         User u = new User();
         while (rs.next()) {
             u.setUserId(rs.getString(1));
