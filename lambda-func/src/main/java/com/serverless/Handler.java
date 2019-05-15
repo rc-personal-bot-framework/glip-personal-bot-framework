@@ -2,11 +2,12 @@ package com.serverless;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import object.SheetRequest;
+import com.object.SheetRequest;
+import com.sheet.GoogleSheetService;
 import org.apache.log4j.Logger;
-import sheet.GoogleSheetService;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class Handler implements RequestHandler<SheetRequest, ApiGatewayResponse>
         Map responseBody = null;
         try {
             responseBody = service.getContent(input);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             LOG.error("", e);
         }
         LOG.info(String.format("response result : %s ", responseBody));

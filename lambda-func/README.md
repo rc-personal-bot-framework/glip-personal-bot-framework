@@ -163,4 +163,7 @@ By default, AWS Lambda limits the total concurrent executions across all functio
 export AWS_ACCESS_KEY_ID=AKIAZTVBD726YYPDXAMJ
 export AWS_SECRET_ACCESS_KEY=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
 
+gradle build
+serverless deploy
+
 ```

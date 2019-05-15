@@ -1,8 +1,8 @@
-package object;
+package com.object;
 
 public class User {
     private String userId;
-    private String documentId;
+    private String docId;
 
     public String getUserId() {
         return userId;
@@ -12,11 +12,11 @@ public class User {
         this.userId = userId;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public String getDocId() {
+        return docId;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 }
