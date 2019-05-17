@@ -68,7 +68,7 @@ public class GoogleSheetService extends AbstractSheetService {
             for (int i = 0; i < lines.length; i++) {
                 List<String> l = new ArrayList<>();
                 String lStr = lines[i];
-                String[] cells = lStr.split(" ");
+                String[] cells = lStr.split("\t");
                 l.add(cells[0]);
                 l.add(cells[1]);
                 values.add(l);

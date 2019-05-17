@@ -160,8 +160,8 @@ By default, AWS Lambda limits the total concurrent executions across all functio
 
 ##
 ```bash
-export AWS_ACCESS_KEY_ID=AKIAZTVBD726YYPDXAMJ
-export AWS_SECRET_ACCESS_KEY=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
+export AWS_ACCESS_KEY_ID=AKIAJL7NOLXF35AG6LOA
+export AWS_SECRET_ACCESS_KEY=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
 
 gradle build
 serverless deploy
