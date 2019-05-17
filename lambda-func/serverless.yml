@@ -15,4 +15,4 @@ functions:
     events:
       - http:
           path: content
-          method: get
+          method: post
